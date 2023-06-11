@@ -20,7 +20,7 @@ data class Point2D(val x: Double, val y: Double) {
   }
 
   fun impactVector(p: Point2D): Vector2D {
-    val dx  = p.x - x
+    val dx = p.x - x
     val dy = p.y - y
     return Vector2D(dx, dy)
   }
@@ -38,6 +38,6 @@ data class Point2D(val x: Double, val y: Double) {
   }
 
   fun distance(p: Point2D): Double {
-    return sqrt((x - p.x) * (x - p.x) + (y - p.y) * (y - p.y) )
+    return sqrt((x - p.x) * (x - p.x) + (y - p.y) * (y - p.y))
   }
 }

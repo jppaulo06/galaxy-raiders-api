@@ -21,7 +21,7 @@ services:
     build:
       context: .
       target: "base"
-    command: "gradle formatKotlin detekt"
+    command: "gradle formatKotlin detekt --scan"
     volumes:
       - "./:/home/gradle/galaxy-raiders/"
     profiles:

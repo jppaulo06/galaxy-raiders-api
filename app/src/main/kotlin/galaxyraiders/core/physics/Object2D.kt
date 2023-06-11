@@ -12,8 +12,11 @@ open class Object2D(
   var velocity: Vector2D = initialVelocity
     protected set
 
-  fun move() {
-    this.center += this.velocity
+  val rotation get() = velocity.degree
+
+  open fun move(velocity: Vector2D = this.velocity) {
+    this.velocity = velocity
+    this.center += velocity
   }
 
   fun shift(force: Vector2D) {

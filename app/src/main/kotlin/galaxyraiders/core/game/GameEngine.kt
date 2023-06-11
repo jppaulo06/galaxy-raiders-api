@@ -7,6 +7,9 @@ import galaxyraiders.ports.ui.Controller.PlayerCommand
 import galaxyraiders.ports.ui.Visualizer
 import kotlin.system.measureTimeMillis
 
+import galaxyraiders.core.score.Scoreboard
+import galaxyraiders.core.score.Leaderboard
+
 const val MILLISECONDS_PER_SECOND: Int = 1000
 
 object GameEngineConfig {
@@ -26,6 +29,8 @@ class GameEngine(
   val generator: RandomGenerator,
   val controller: Controller,
   val visualizer: Visualizer,
+  val scoreboard: Scoreboard,
+  val leaderboard: Leaderboard
 ) {
   val field = SpaceField(
     width = GameEngineConfig.spaceFieldWidth,
@@ -80,6 +85,7 @@ class GameEngine(
     if (!this.playing) return
     this.handleCollisions()
     this.moveSpaceObjects()
+    this.removeTimeEndedExplosions()
     this.trimSpaceObjects()
     this.generateAsteroids()
   }
@@ -88,19 +94,34 @@ class GameEngine(
     this.field.spaceObjects.forEachPair {
         (first, second) ->
       if (first.impacts(second)) {
+        if (first is Missile && second is Asteroid) {
+          field.explode(second as Asteroid)
+          this.addScore()
+        }
         first.collideWith(second, GameEngineConfig.coefficientRestitution)
       }
     }
   }
 
+  fun addScore() {
+    scoreboard.addScore()
+    leaderboard.addScore()
+  }
+
   fun moveSpaceObjects() {
     this.field.moveShip()
     this.field.moveAsteroids()
+    this.field.moveExplosions()
     this.field.moveMissiles()
+  }
+
+  fun removeTimeEndedExplosions() {
+    this.field.removeTimeEndedExplosions()
   }
 
   fun trimSpaceObjects() {
     this.field.trimAsteroids()
+    this.field.trimExplosions()
     this.field.trimMissiles()
   }
 

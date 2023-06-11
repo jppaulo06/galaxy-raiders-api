@@ -8,6 +8,9 @@ import galaxyraiders.core.game.GameEngine
 import kotlin.concurrent.thread
 import kotlin.random.Random
 
+import galaxyraiders.core.score.Scoreboard
+import galaxyraiders.core.score.Leaderboard
+
 object AppConfig {
   val config = Config("GR__APP__")
 
@@ -27,8 +30,11 @@ fun main() {
 
   val (controller, visualizer) = ui.build()
 
+  val scoreboard = Scoreboard()
+  val leaderboard = Leaderboard()
+
   val gameEngine = GameEngine(
-    generator, controller, visualizer
+    generator, controller, visualizer, scoreboard, leaderboard
   )
 
   thread { gameEngine.execute() }

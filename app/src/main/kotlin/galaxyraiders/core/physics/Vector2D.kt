@@ -1,10 +1,12 @@
 package galaxyraiders.core.physics
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import kotlin.math.sqrt
-import kotlin.math.atan
 import kotlin.math.PI
 import kotlin.math.abs
+import kotlin.math.atan
+import kotlin.math.sqrt
+
+const val HALF_CIRCLE_DEGREES: Int = 180
 
 @JsonIgnoreProperties("unit", "normal", "degree", "magnitude")
 data class Vector2D(val dx: Double, val dy: Double) {
@@ -18,19 +20,20 @@ data class Vector2D(val dx: Double, val dy: Double) {
   val radiant: Double
     get() {
       val r = atan(Math.abs(dy) / Math.abs(dx))
-      if(dx < 0 && dy < 0) {
+      if (dx < 0 && dy < 0) {
         return -(PI - r)
-      } else if(dx < 0 && dy > 0) {
+      } else if (dx < 0 && dy > 0) {
         return PI - r
-      } else if(dx > 0 && dy < 0) {
+      } else if (dx > 0 && dy < 0) {
         return -r
       } else {
         return r
       }
     }
 
+
   val degree: Double
-    get() = radiant * 180 / PI
+    get() = radiant * HALF_CIRCLE_DEGREES / PI
 
   val unit: Vector2D
     get() = this / magnitude
@@ -70,7 +73,7 @@ data class Vector2D(val dx: Double, val dy: Double) {
     val v = vectorProject(target)
     val u = target.unit
     val res = v.dx / u.dx
-    if(res.isNaN()){
+    if (res.isNaN()) {
       return v.dy / u.dy
     }
     return res
