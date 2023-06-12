@@ -1,11 +1,16 @@
 package galaxyraiders.core.game
 
+import galaxyraiders.Config
+
 import galaxyraiders.core.physics.Point2D
 import galaxyraiders.core.physics.Vector2D
 
-const val EXPLOSION_TIME: Int = 20
+object ExplosionConfig {
+  private val config = Config("GR__CORE__GAME__EXPLOSION__")
 
-const val EXPLOSION_RADIUS_MULTIPLIER = 2
+  val explosionTime = config.get<Int>("EXPLOSION_TIME")
+  val explosionRadiusMultiplier = config.get<Int>("EXPLOSION_RADIUS_MULTIPLIER")
+}
 
 class Explosion(
     var asteroid: Asteroid
@@ -15,7 +20,7 @@ class Explosion(
       'X',
       asteroid.center,
       asteroid.velocity,
-      EXPLOSION_RADIUS_MULTIPLIER * asteroid.radius,
+      ExplosionConfig.explosionRadiusMultiplier * asteroid.radius,
       asteroid.mass
   ) {
 
@@ -26,7 +31,7 @@ class Explosion(
   }
 
   fun timeHasNotEnded(): Boolean {
-    return this.time <= EXPLOSION_TIME
+    return this.time <= ExplosionConfig.explosionTime
   }
 
   fun move () {

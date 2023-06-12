@@ -71,6 +71,12 @@ data class SpaceField(val width: Int, val height: Int, val generator: RandomGene
     this.asteroids += this.createAsteroidWithRandomProperties()
   }
 
+  fun generateExplosion(asteroid: Asteroid) {
+    asteroid.explode()
+    this.explosions += createExplosionWithAsteroid(asteroid)
+    // point logic should go here
+  }
+
   fun trimMissiles() {
     this.missiles = this.missiles.filter {
       it.inBoundaries(this.boundaryX, this.boundaryY)
@@ -91,12 +97,6 @@ data class SpaceField(val width: Int, val height: Int, val generator: RandomGene
 
   fun removeTimeEndedExplosions() {
     this.explosions = this.explosions.filter { it.timeHasNotEnded() }
-  }
-
-  fun explode(asteroid: Asteroid) {
-    asteroid.explode()
-    this.explosions += createExplosionWithAsteroid(asteroid)
-    // point logic should go here
   }
 
   private fun initializeShip(): SpaceShip {

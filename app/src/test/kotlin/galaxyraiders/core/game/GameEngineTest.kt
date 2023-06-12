@@ -5,6 +5,10 @@ import galaxyraiders.helpers.ControllerSpy
 import galaxyraiders.helpers.MaxValueGeneratorStub
 import galaxyraiders.helpers.MinValueGeneratorStub
 import galaxyraiders.helpers.VisualizerSpy
+import galaxyraiders.helpers.FakeScoreboard
+import galaxyraiders.helpers.FakeLeaderboard
+import galaxyraiders.core.score.Scoreboard
+import galaxyraiders.core.score.Leaderboard
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
@@ -20,23 +24,31 @@ class GameEngineTest {
   private val minGenerator = MinValueGeneratorStub()
   private val controllerSpy = ControllerSpy()
   private val visualizerSpy = VisualizerSpy()
+  private val fakeScoreboard = FakeScoreboard()
+  private val fakeLeaderboard = FakeLeaderboard()
 
   private val normalGame = GameEngine(
     generator = avgGenerator,
     controller = controllerSpy,
     visualizer = visualizerSpy,
+    scoreboard = fakeScoreboard as Scoreboard,
+    leaderboard = fakeLeaderboard as Leaderboard
   )
 
   private val easyGame = GameEngine(
     generator = maxGenerator,
     controller = controllerSpy,
     visualizer = visualizerSpy,
+    scoreboard = fakeScoreboard as Scoreboard,
+    leaderboard = fakeLeaderboard as Leaderboard
   )
 
   private val hardGame = GameEngine(
     generator = minGenerator,
     controller = controllerSpy,
     visualizer = visualizerSpy,
+    scoreboard = fakeScoreboard as Scoreboard,
+    leaderboard = fakeLeaderboard as Leaderboard
   )
 
   @Test

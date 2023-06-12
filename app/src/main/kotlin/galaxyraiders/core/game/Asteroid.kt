@@ -13,6 +13,8 @@ class Asteroid(
 
   private var exploded: Boolean = false
 
+  val score = this.mass * this.radius
+
   fun explode () {
     this.exploded = true
   }

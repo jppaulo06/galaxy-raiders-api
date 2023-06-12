@@ -95,17 +95,17 @@ class GameEngine(
         (first, second) ->
       if (first.impacts(second)) {
         if (first is Missile && second is Asteroid) {
-          field.explode(second as Asteroid)
-          this.addScore()
+          field.generateExplosion(second)
+          this.addScore(second)
         }
         first.collideWith(second, GameEngineConfig.coefficientRestitution)
       }
     }
   }
 
-  fun addScore() {
-    scoreboard.addScore()
-    leaderboard.addScore()
+  fun addScore(asteroid: Asteroid) {
+    scoreboard.addScore(asteroid)
+    leaderboard.addScore(asteroid)
   }
 
   fun moveSpaceObjects() {

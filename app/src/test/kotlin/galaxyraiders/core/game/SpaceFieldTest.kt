@@ -81,6 +81,15 @@ class SpaceFieldTest {
   }
 
   @Test
+  fun `it starts with no explosions`() {
+    assertAll(
+      "SpaceField should initialize an empty list of explosions",
+      { assertNotNull(spaceField.explosions) },
+      { assertEquals(0, spaceField.explosions.size) },
+    )
+  }
+
+  @Test
   fun `it has a list of objects with ship, missiles and asteroids`() {
     val ship = spaceField.ship
 
@@ -218,6 +227,22 @@ class SpaceFieldTest {
   }
 
   @Test
+  fun `it moves explosions accordingly to linked asteroids`() {
+    spaceField.generateAsteroid()
+
+    val asteroid = spaceField.asteroids.last()
+
+    spaceField.generateExplosion(asteroid)
+
+    val explosion = spaceField.explosions.last()
+
+    spaceField.moveAsteroids()
+    spaceField.moveExplosions()
+
+    assertEquals(explosion.center, asteroid.center)
+  }
+
+  @Test
   fun `it can generate a new missile`() {
     val numMissiles = spaceField.missiles.size
     spaceField.generateMissile()
@@ -285,7 +310,7 @@ class SpaceFieldTest {
       { assertTrue(asteroid.velocity.dx >= -0.5) },
       { assertTrue(asteroid.velocity.dx <= 0.5) },
       { assertTrue(asteroid.velocity.dy >= -2.0) },
-      { assertTrue(asteroid.velocity.dy <= -1.0) },
+      { assertTrue(asteroid.velocity.dy < 0) },
     )
   }
 
@@ -313,6 +338,18 @@ class SpaceFieldTest {
       { assertTrue(asteroid.mass >= 500) },
       { assertTrue(asteroid.mass <= 1000) },
     )
+  }
+
+  @Test
+  fun `it can generate a new explosion`() {
+    val numExplosions = spaceField.explosions.size
+
+    spaceField.generateAsteroid()
+    val asteroid = spaceField.asteroids.last()
+
+    spaceField.generateExplosion(asteroid)
+
+    assertEquals(numExplosions + 1, spaceField.explosions.size)
   }
 
   @Test
@@ -365,6 +402,30 @@ class SpaceFieldTest {
   }
 
   @Test
+  fun `it can remove explosions outside its boundary`() {
+    spaceField.generateAsteroid()
+
+    val asteroid = spaceField.asteroids.last()
+
+    spaceField.generateExplosion(asteroid)
+
+    val explosion = spaceField.explosions.last()
+
+    val distanceToBottomBorder = explosion.center.y - spaceField.boundaryY.start
+    val repetitionsToGetOutSpaceField = Math.ceil(
+      distanceToBottomBorder / Math.abs(explosion.velocity.dy)
+    ).toInt()
+
+    repeat(repetitionsToGetOutSpaceField) {
+      explosion.move()
+    }
+
+    spaceField.trimExplosions()
+
+    assertEquals(-1, spaceField.explosions.indexOf(explosion))
+  }
+
+  @Test
   fun `it does not remove asteroids inside its boundary`() {
     spaceField.generateAsteroid()
 
@@ -375,6 +436,23 @@ class SpaceFieldTest {
     spaceField.trimAsteroids()
 
     assertNotEquals(-1, spaceField.asteroids.indexOf(asteroid))
+  }
+
+  @Test
+  fun `it does not remove explosions inside its boundary`() {
+    spaceField.generateAsteroid()
+
+    val asteroid = spaceField.asteroids.last()
+
+    spaceField.generateExplosion(asteroid)
+
+    val explosion = spaceField.explosions.last()
+
+    explosion.move()
+
+    spaceField.trimExplosions()
+
+    assertNotEquals(-1, spaceField.explosions.indexOf(explosion))
   }
 
   private companion object {

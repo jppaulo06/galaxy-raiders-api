@@ -1,6 +1,6 @@
 package galaxyraiders.core.score
 
-class Leaderboard :
+open class Leaderboard :
   Board (fileName = "Leaderboard") {
 
   override fun updateSaves() {

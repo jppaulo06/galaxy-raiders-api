@@ -1,6 +1,8 @@
 package galaxyraiders.helpers
 
 import galaxyraiders.core.game.SpaceField
+import galaxyraiders.core.score.Scoreboard
+import galaxyraiders.core.score.Leaderboard
 import galaxyraiders.ports.RandomGenerator
 import galaxyraiders.ports.ui.Controller
 import galaxyraiders.ports.ui.Controller.PlayerCommand
@@ -86,4 +88,16 @@ class ControllerSpy : Controller {
     if (playerCommands.isEmpty()) return null
     return playerCommands.remove()
   }
+}
+
+class FakeScoreboard : Scoreboard () {
+  override fun save () {}
+  override fun readSavedData() {}
+  override fun defineFile() {}
+}
+
+class FakeLeaderboard : Leaderboard () {
+  override fun save () {}
+  override fun readSavedData() {}
+  override fun defineFile() {}
 }
