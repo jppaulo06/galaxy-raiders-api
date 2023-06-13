@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-@DisplayName("Given an asteroid")
+@DisplayName("Given an explosion")
 class ExplosionTest {
   private val asteroid = Asteroid(
     initialPosition = Point2D(1.0, 1.0),
